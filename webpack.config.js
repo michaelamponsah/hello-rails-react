@@ -10,20 +10,39 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js)$/,
+        test: /\.(js|jsx)$/,                          
         exclude: /node_modules/,
-        use: ['babel-loader'],
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              '@babel/preset-env',                       
+              '@babel/preset-react'                      
+            ],
+            plugins: [
+              '@babel/plugin-proposal-class-properties',  
+              '@babel/plugin-transform-runtime'           
+            ]
+          }
+        }
       },
-    ],
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"]
+      }
+    ]
+  },
+  resolve: {
+    extensions: ['.js', '.jsx']                         
   },
   output: {
     filename: "[name].js",
     sourceMapFilename: "[file].map",
-    path: path.resolve(__dirname, "app/assets/builds"),
+    path: path.resolve(__dirname, "app/assets/builds")
   },
   plugins: [
     new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1
     })
   ]
-}
+};
